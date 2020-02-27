@@ -2,12 +2,14 @@
 
 
 #include "CobblePaperCharacter.h"
-
 #include "Components/InputComponent.h"
+#include "PaperFlipbookComponent.h"
 
-ACobblePaperCharacter::ACobblePaperCharacter()
-{
+ACobblePaperCharacter::ACobblePaperCharacter() : Super()
+{	
 	PrimaryActorTick.bCanEverTick = true;
+	auto Flipbook = GetSprite();
+	Flipbook->CastShadow = true;
 }
 
 void ACobblePaperCharacter::BeginPlay()
@@ -24,9 +26,15 @@ void ACobblePaperCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("MoveHorizontal", this, &ACobblePaperCharacter::MoveHorizontal);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACobblePaperCharacter::DoJump);
 }
 
 void ACobblePaperCharacter::MoveHorizontal(float Value)
 {
 	AddMovementInput(GetActorForwardVector(), Value);
+}
+
+void ACobblePaperCharacter::DoJump()
+{
+	Jump();
 }

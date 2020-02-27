@@ -30,4 +30,5 @@ public:
 
 private:
 	void MoveHorizontal(float Value);
+	void DoJump();
 };
