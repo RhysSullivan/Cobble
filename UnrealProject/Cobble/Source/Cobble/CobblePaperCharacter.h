@@ -83,4 +83,7 @@ private:
 	class UPaperFlipbookComponent* FlipbookComponent; // Reference to the flipbook pointer so we don't have to call GetSprite() over and over
 	FTimerHandle JumpTimerHandle; // Managers the timer for jumping related animations
 	FTimerHandle InteractTimerHandle;
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* InteractCollision;
+	AActor* OverlappedActor;
 };

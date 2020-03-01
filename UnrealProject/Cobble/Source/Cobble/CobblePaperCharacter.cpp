@@ -8,11 +8,15 @@
 #include "PaperFlipbook.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "Components/BoxComponent.h"
+#include "InteractInterface.h"
 ACobblePaperCharacter::ACobblePaperCharacter()
 {	
 	PrimaryActorTick.bCanEverTick = true;
 	FlipbookComponent = GetSprite();
 	FlipbookComponent->CastShadow = true;
+	InteractCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractCollision"));
+	InteractCollision->AttachTo(GetRootComponent());
 }
 
 void ACobblePaperCharacter::BeginPlay()
@@ -28,6 +32,35 @@ void ACobblePaperCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void ACobblePaperCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	TArray<AActor*> OverlappingActors;
+	InteractCollision->GetOverlappingActors(OverlappingActors);
+	bool bIsActorWithInteractInterfaceInRange = false;
+	for (const auto& a : OverlappingActors)
+	{
+		if (a->GetClass()->ImplementsInterface(UInteractInterface::StaticClass()))
+		{
+			bIsActorWithInteractInterfaceInRange = true;
+			if (a != OverlappedActor)
+			{
+				IInteractInterface* NewOverlappedActorInteractInterface = Cast<IInteractInterface>(a);
+				IInteractInterface* OldOverlappedActorInteractInterface = Cast<IInteractInterface>(OverlappedActor);
+				
+				NewOverlappedActorInteractInterface->Highlight();
+				if(OldOverlappedActorInteractInterface != nullptr)
+				OldOverlappedActorInteractInterface->Unhighlight();
+				OverlappedActor = a;
+				break;
+			}
+		}
+	}
+	if (!bIsActorWithInteractInterfaceInRange && OverlappedActor != nullptr)
+	{
+		IInteractInterface* OldOverlappedActorInteractInterface = Cast<IInteractInterface>(OverlappedActor);
+		if (OldOverlappedActorInteractInterface != nullptr)
+			OldOverlappedActorInteractInterface->Unhighlight();
+		OverlappedActor = nullptr;
+	}
+
 	RotateToMatchMovementDirection();
 	DoCobbleStateMachine();
 }
@@ -69,7 +102,7 @@ bool ACobblePaperCharacter::ShouldDoStateMachine()
 
 void ACobblePaperCharacter::RotateToMatchMovementDirection()
 {
-	if (GetVelocity().Size() > 0)
+	if (FMath::Square(GetVelocity().X) + FMath::Square(GetVelocity().Y) > 0)
 	{
 		float FacingDirection = FVector::DotProduct(GetActorForwardVector(), GetVelocity().GetSafeNormal());
 		if (FacingDirection < -.5)
