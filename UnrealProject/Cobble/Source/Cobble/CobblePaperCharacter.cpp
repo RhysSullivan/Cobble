@@ -9,6 +9,7 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "Components/BoxComponent.h"
+#include "PaperSpriteComponent.h"
 #include "InteractInterface.h"
 ACobblePaperCharacter::ACobblePaperCharacter()
 {	
@@ -16,7 +17,9 @@ ACobblePaperCharacter::ACobblePaperCharacter()
 	FlipbookComponent = GetSprite();
 	FlipbookComponent->CastShadow = true;
 	InteractCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractCollision"));
-	InteractCollision->AttachTo(GetRootComponent());
+	InteractCollision->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	HighlightedGearComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("HighlightedGear"));
+	HighlightedGearComponent->SetHiddenInGame(true);
 }
 
 void ACobblePaperCharacter::BeginPlay()
@@ -170,3 +173,13 @@ bool ACobblePaperCharacter::CanInteract()
 	return !GetMovementComponent()->IsFalling() && !JumpTimerHandle.IsValid();
 }
 void ACobblePaperCharacter::PostInteract(){GetWorld()->GetTimerManager().ClearTimer(InteractTimerHandle);}
+
+void ACobblePaperCharacter::ShowGearHighlight()
+{
+	HighlightedGearComponent->SetHiddenInGame(false);
+}
+
+void ACobblePaperCharacter::HideGearHighlight()
+{
+	HighlightedGearComponent->SetHiddenInGame(true);
+}

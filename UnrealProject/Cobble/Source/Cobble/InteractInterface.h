@@ -24,4 +24,5 @@ class COBBLE_API IInteractInterface
 public:
 	virtual void Highlight() = 0;
 	virtual void Unhighlight() = 0;
+	virtual void Interact() = 0;
 };

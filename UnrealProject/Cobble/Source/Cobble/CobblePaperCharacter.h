@@ -30,6 +30,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void ShowGearHighlight();
+	void HideGearHighlight();
 public:
 	UPROPERTY(EditAnywhere)
 	class UPaperFlipbook* RunFlipbook;
@@ -45,6 +48,8 @@ public:
 	class UPaperFlipbook* LandingFlipbook;
 	UPROPERTY(EditAnywhere)
 	class UPaperFlipbook* InteractFlipbook;
+	UPROPERTY(VisibleAnywhere)
+	class UPaperSpriteComponent* HighlightedGearComponent;
 private:
 	void MoveHorizontal(float Value);
 
@@ -79,6 +84,7 @@ private:
 	void Interact();
 	bool CanInteract();
 	void PostInteract();
+
 private:
 	class UPaperFlipbookComponent* FlipbookComponent; // Reference to the flipbook pointer so we don't have to call GetSprite() over and over
 	FTimerHandle JumpTimerHandle; // Managers the timer for jumping related animations

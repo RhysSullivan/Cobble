@@ -18,7 +18,7 @@ public:
 	AInteractable();
 	virtual void Highlight() override;
 	virtual void Unhighlight() override;
-
+	virtual void Interact() override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -26,7 +26,7 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-private:
+protected:
 	UPROPERTY(VisibleAnywhere)
 	class UPaperSpriteComponent* RegularSpriteComponent;
 	UPROPERTY(VisibleAnywhere)

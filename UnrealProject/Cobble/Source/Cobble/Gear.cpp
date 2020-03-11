@@ -2,29 +2,41 @@
 
 
 #include "Gear.h"
+#include "Kismet/GameplayStatics.h"
+#include "Cobble/CobblePaperCharacter.h"
 
 // Sets default values
 AGear::AGear()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	GearSpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("GearSpriteComponent"));
-	SetRootComponent(GearSpriteComponent);
-	GearHighlightComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("GearHighlight"));
-	GearHighlightComponent->SetupAttachment(GearSpriteComponent);
-	GearHighlightComponent->SetHiddenInGame(true);
 }
 
 void AGear::Highlight()
 {
-	GearSpriteComponent->SetHiddenInGame(true);
-	GearHighlightComponent->SetHiddenInGame(false);
+	RegularSpriteComponent->SetHiddenInGame(true);
+	ACobblePaperCharacter* Player = Cast<ACobblePaperCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	if (Player != nullptr)
+	{
+		Player->ShowGearHighlight();
+	}
+	
+	//GearHighlightComponent->SetHiddenInGame(false);
 }
 
 void AGear::Unhighlight()
 {
-	GearSpriteComponent->SetHiddenInGame(false);
-	GearHighlightComponent->SetHiddenInGame(true);
+	RegularSpriteComponent->SetHiddenInGame(false);
+	ACobblePaperCharacter* Player = Cast<ACobblePaperCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	if (Player != nullptr)
+	{
+		Player->HideGearHighlight();
+	}
+	//GearHighlightComponent->SetHiddenInGame(true);
+}
+
+void AGear::Interact()
+{
 }
 
 // Called when the game starts or when spawned

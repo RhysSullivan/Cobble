@@ -46,3 +46,7 @@ void AInteractable::Unhighlight()
 	HighlightedSpriteComponent->SetHiddenInGame(true);
 }
 
+void AInteractable::Interact()
+{
+}
+
