@@ -16,10 +16,13 @@ ACobblePaperCharacter::ACobblePaperCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	FlipbookComponent = GetSprite();
 	FlipbookComponent->CastShadow = true;
+	
 	InteractCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractCollision"));
 	InteractCollision->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	
 	HighlightedGearComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("HighlightedGear"));
 	HighlightedGearComponent->SetHiddenInGame(true);
+	HighlightedGearComponent->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void ACobblePaperCharacter::BeginPlay()
@@ -38,23 +41,30 @@ void ACobblePaperCharacter::Tick(float DeltaTime)
 	TArray<AActor*> OverlappingActors;
 	InteractCollision->GetOverlappingActors(OverlappingActors);
 	bool bIsActorWithInteractInterfaceInRange = false;
-	for (const auto& a : OverlappingActors)
+	if(!OverlappingActors.Contains(OverlappedActor))
 	{
-		if (a->GetClass()->ImplementsInterface(UInteractInterface::StaticClass()))
+		for (const auto& a : OverlappingActors)
 		{
-			bIsActorWithInteractInterfaceInRange = true;
-			if (a != OverlappedActor)
+			if (a->GetClass()->ImplementsInterface(UInteractInterface::StaticClass()))
 			{
-				IInteractInterface* NewOverlappedActorInteractInterface = Cast<IInteractInterface>(a);
-				IInteractInterface* OldOverlappedActorInteractInterface = Cast<IInteractInterface>(OverlappedActor);
-				
-				NewOverlappedActorInteractInterface->Highlight();
-				if(OldOverlappedActorInteractInterface != nullptr)
-				OldOverlappedActorInteractInterface->Unhighlight();
-				OverlappedActor = a;
-				break;
+				bIsActorWithInteractInterfaceInRange = true;
+				if (a != OverlappedActor)
+				{
+					IInteractInterface* NewOverlappedActorInteractInterface = Cast<IInteractInterface>(a);
+					IInteractInterface* OldOverlappedActorInteractInterface = Cast<IInteractInterface>(OverlappedActor);
+
+					NewOverlappedActorInteractInterface->Highlight();
+					if (OldOverlappedActorInteractInterface != nullptr)
+						OldOverlappedActorInteractInterface->Unhighlight();
+					OverlappedActor = a;
+					break;
+				}
 			}
 		}
+	}
+	else
+	{
+		bIsActorWithInteractInterfaceInRange = true;
 	}
 	if (!bIsActorWithInteractInterfaceInRange && OverlappedActor != nullptr)
 	{
