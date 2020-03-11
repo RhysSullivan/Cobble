@@ -23,6 +23,10 @@ ACobblePaperCharacter::ACobblePaperCharacter()
 	HighlightedGearComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("HighlightedGear"));
 	HighlightedGearComponent->SetHiddenInGame(true);
 	HighlightedGearComponent->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+
+	PickedUpGearComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("PickedUpGear"));
+	PickedUpGearComponent->SetHiddenInGame(true);
+	PickedUpGearComponent->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void ACobblePaperCharacter::BeginPlay()
@@ -156,16 +160,19 @@ void ACobblePaperCharacter::PreJump()
 	FlipbookComponent->SetFlipbook(PreJumpFlipbook);
 	GetWorld()->GetTimerManager().SetTimer(JumpTimerHandle, this, &ACobblePaperCharacter::DoJump, FlipbookComponent->GetFlipbookLength(), false);
 }
+
 bool ACobblePaperCharacter::CanJump()
 {
 	return Super::CanJump() && !GetMovementComponent()->IsFalling() && !InteractTimerHandle.IsValid();
 }
+
 void ACobblePaperCharacter::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);
 	FlipbookComponent->SetFlipbook(LandingFlipbook);
 	GetWorld()->GetTimerManager().SetTimer(JumpTimerHandle, this, &ACobblePaperCharacter::PostLandedAnimation, FlipbookComponent->GetFlipbookLength(), false);
 }
+
 void ACobblePaperCharacter::PostLandedAnimation() { GetWorld()->GetTimerManager().ClearTimer(JumpTimerHandle); }
 
 /*
@@ -177,19 +184,66 @@ void ACobblePaperCharacter::Interact()
 		return;
 	FlipbookComponent->SetFlipbook(InteractFlipbook);
 	GetWorld()->GetTimerManager().SetTimer(InteractTimerHandle, this, &ACobblePaperCharacter::PostInteract, FlipbookComponent->GetFlipbookLength(), false);
+	IInteractInterface* OverlappedActorInteractInterface = Cast<IInteractInterface>(OverlappedActor);
+	if (OverlappedActorInteractInterface != nullptr)
+	{
+		OverlappedActorInteractInterface->Interact();
+	}
 }
+
 bool ACobblePaperCharacter::CanInteract()
 {
 	return !GetMovementComponent()->IsFalling() && !JumpTimerHandle.IsValid();
 }
-void ACobblePaperCharacter::PostInteract(){GetWorld()->GetTimerManager().ClearTimer(InteractTimerHandle);}
+
+void ACobblePaperCharacter::PostInteract()
+{
+	GetWorld()->GetTimerManager().ClearTimer(InteractTimerHandle);
+}
 
 void ACobblePaperCharacter::ShowGearHighlight()
 {
+	if(HeldGear == nullptr)
 	HighlightedGearComponent->SetHiddenInGame(false);
 }
 
 void ACobblePaperCharacter::HideGearHighlight()
 {
 	HighlightedGearComponent->SetHiddenInGame(true);
+}
+
+void ACobblePaperCharacter::ShowHeldGear()
+{
+	PickedUpGearComponent->SetHiddenInGame(false);
+}
+
+void ACobblePaperCharacter::HideHeldGear()
+{
+	PickedUpGearComponent->SetHiddenInGame(true);
+}
+
+bool ACobblePaperCharacter::IsPlayerHoldingGear()
+{
+	return HeldGear != nullptr;
+}
+
+bool ACobblePaperCharacter::ReceiveGear(AActor * Gear)
+{
+	if (HeldGear == nullptr)
+	{
+		ShowHeldGear();
+		HeldGear = Gear;
+		return true;
+	}
+	return false;
+}
+
+AActor * ACobblePaperCharacter::TakeGear()
+{
+	if (HeldGear != nullptr)
+	{
+		HideHeldGear();
+		return HeldGear;
+	}
+	return nullptr;
 }

@@ -14,13 +14,12 @@ AGear::AGear()
 
 void AGear::Highlight()
 {
-	RegularSpriteComponent->SetHiddenInGame(true);
 	ACobblePaperCharacter* Player = Cast<ACobblePaperCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if (Player != nullptr)
+	if (Player != nullptr && !Player->IsPlayerHoldingGear())
 	{
 		Player->ShowGearHighlight();
+		RegularSpriteComponent->SetHiddenInGame(true);
 	}
-	
 	//GearHighlightComponent->SetHiddenInGame(false);
 }
 
@@ -37,6 +36,15 @@ void AGear::Unhighlight()
 
 void AGear::Interact()
 {
+	ACobblePaperCharacter* Player = Cast<ACobblePaperCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	if (Player != nullptr)
+	{
+		if (Player->ReceiveGear(this))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("PICKUP"));
+			SetActorLocation(FVector(0, -40000, 0));
+		}
+	}
 }
 
 // Called when the game starts or when spawned

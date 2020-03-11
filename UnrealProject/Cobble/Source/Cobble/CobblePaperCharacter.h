@@ -31,8 +31,19 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+	/*
+	Gear functionality
+	*/
 	void ShowGearHighlight();
 	void HideGearHighlight();
+
+	void ShowHeldGear();
+	void HideHeldGear();
+
+	bool IsPlayerHoldingGear();
+	bool ReceiveGear(AActor* Gear);
+	AActor* TakeGear(); // not great to return an actor* due to memory allocation, kind of alright since it's a pointer but could be a bool that takes in a reference.
 public:
 	UPROPERTY(EditAnywhere)
 	class UPaperFlipbook* RunFlipbook;
@@ -50,6 +61,9 @@ public:
 	class UPaperFlipbook* InteractFlipbook;
 	UPROPERTY(VisibleAnywhere)
 	class UPaperSpriteComponent* HighlightedGearComponent;
+	UPROPERTY(VisibleAnywhere)
+	class UPaperSpriteComponent* PickedUpGearComponent;
+
 private:
 	void MoveHorizontal(float Value);
 
@@ -84,7 +98,6 @@ private:
 	void Interact();
 	bool CanInteract();
 	void PostInteract();
-
 private:
 	class UPaperFlipbookComponent* FlipbookComponent; // Reference to the flipbook pointer so we don't have to call GetSprite() over and over
 	FTimerHandle JumpTimerHandle; // Managers the timer for jumping related animations
@@ -92,4 +105,5 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* InteractCollision;
 	AActor* OverlappedActor;
+	AActor* HeldGear;
 };
