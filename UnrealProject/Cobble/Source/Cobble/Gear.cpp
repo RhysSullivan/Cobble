@@ -2,8 +2,6 @@
 
 
 #include "Gear.h"
-#include "Kismet/GameplayStatics.h"
-#include "Cobble/CobblePaperCharacter.h"
 
 // Sets default values
 AGear::AGear()
@@ -14,34 +12,28 @@ AGear::AGear()
 
 void AGear::Highlight()
 {
-	ACobblePaperCharacter* Player = Cast<ACobblePaperCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (Player != nullptr && !Player->IsPlayerHoldingGear())
 	{
 		Player->ShowGearHighlight();
 		RegularSpriteComponent->SetHiddenInGame(true);
 	}
-	//GearHighlightComponent->SetHiddenInGame(false);
 }
 
 void AGear::Unhighlight()
 {
 	RegularSpriteComponent->SetHiddenInGame(false);
-	ACobblePaperCharacter* Player = Cast<ACobblePaperCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	if (Player != nullptr)
 	{
 		Player->HideGearHighlight();
 	}
-	//GearHighlightComponent->SetHiddenInGame(true);
 }
 
 void AGear::Interact()
 {
-	ACobblePaperCharacter* Player = Cast<ACobblePaperCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	if (Player != nullptr)
 	{
 		if (Player->ReceiveGear(this))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("PICKUP"));
 			SetActorLocation(FVector(0, -40000, 0));
 		}
 	}
