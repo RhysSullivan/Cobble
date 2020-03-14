@@ -2,6 +2,7 @@
 
 
 #include "Interactable.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AInteractable::AInteractable()
@@ -24,14 +25,13 @@ AInteractable::AInteractable()
 void AInteractable::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Player = Cast<ACobblePaperCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 }
 
 // Called every frame
 void AInteractable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AInteractable::Highlight()
@@ -48,5 +48,6 @@ void AInteractable::Unhighlight()
 
 void AInteractable::Interact()
 {
+
 }
 

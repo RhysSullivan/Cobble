@@ -43,7 +43,7 @@ public:
 
 	bool IsPlayerHoldingGear();
 	bool ReceiveGear(AActor* Gear);
-	AActor* TakeGear(); // not great to return an actor* due to memory allocation, kind of alright since it's a pointer but could be a bool that takes in a reference.
+	bool TakeGear(AActor*& Gear);
 public:
 	UPROPERTY(EditAnywhere)
 	class UPaperFlipbook* RunFlipbook;
@@ -98,6 +98,8 @@ private:
 	void Interact();
 	bool CanInteract();
 	void PostInteract();
+
+	void SearchForOverlappedInteractables();
 private:
 	class UPaperFlipbookComponent* FlipbookComponent; // Reference to the flipbook pointer so we don't have to call GetSprite() over and over
 	FTimerHandle JumpTimerHandle; // Managers the timer for jumping related animations

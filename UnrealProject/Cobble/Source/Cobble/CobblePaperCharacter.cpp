@@ -26,7 +26,15 @@ ACobblePaperCharacter::ACobblePaperCharacter()
 
 	PickedUpGearComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("PickedUpGear"));
 	PickedUpGearComponent->SetHiddenInGame(true);
-	PickedUpGearComponent->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	PickedUpGearComponent->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform); // TODO: Attach this to a scene root and use that to mirror the sprite around when the player is facing a different direction.
+}
+
+void ACobblePaperCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAxis("MoveHorizontal", this, &ACobblePaperCharacter::MoveHorizontal);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACobblePaperCharacter::PreJump);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ACobblePaperCharacter::Interact);
 }
 
 void ACobblePaperCharacter::BeginPlay()
@@ -42,10 +50,17 @@ void ACobblePaperCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void ACobblePaperCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	SearchForOverlappedInteractables();
+	RotateToMatchMovementDirection();
+	DoCobbleStateMachine();
+}
+
+void ACobblePaperCharacter::SearchForOverlappedInteractables()
+{
 	TArray<AActor*> OverlappingActors;
 	InteractCollision->GetOverlappingActors(OverlappingActors);
 	bool bIsActorWithInteractInterfaceInRange = false;
-	if(!OverlappingActors.Contains(OverlappedActor))
+	if (!OverlappingActors.Contains(OverlappedActor))
 	{
 		for (const auto& a : OverlappingActors)
 		{
@@ -77,11 +92,12 @@ void ACobblePaperCharacter::Tick(float DeltaTime)
 			OldOverlappedActorInteractInterface->Unhighlight();
 		OverlappedActor = nullptr;
 	}
-
-	RotateToMatchMovementDirection();
-	DoCobbleStateMachine();
 }
 
+
+/*
+ANIMATIONS
+*/
 void ACobblePaperCharacter::DoCobbleStateMachine()
 {
 	if (ShouldDoStateMachine()) // If we are not waiting on an animation to finish
@@ -127,14 +143,6 @@ void ACobblePaperCharacter::RotateToMatchMovementDirection()
 		else
 			FlipbookComponent->SetRelativeRotation(FRotator(0, 0, 0));
 	}
-}
-
-void ACobblePaperCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAxis("MoveHorizontal", this, &ACobblePaperCharacter::MoveHorizontal);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACobblePaperCharacter::PreJump);
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ACobblePaperCharacter::Interact);
 }
 
 void ACobblePaperCharacter::MoveHorizontal(float Value)
@@ -201,6 +209,33 @@ void ACobblePaperCharacter::PostInteract()
 	GetWorld()->GetTimerManager().ClearTimer(InteractTimerHandle);
 }
 
+bool ACobblePaperCharacter::ReceiveGear(AActor * Gear)
+{
+	if (HeldGear == nullptr)
+	{
+		ShowHeldGear();
+		HeldGear = Gear;
+		return true;
+	}
+	return false;
+}
+
+bool ACobblePaperCharacter::TakeGear(AActor*& Gear)
+{
+	if (HeldGear != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TAKINGGEAR"));
+		Gear = HeldGear;
+		HeldGear = nullptr;
+		HideHeldGear();
+		return true;
+	}
+	return false;
+}
+
+/*
+GEAR HIGHLIGHTING
+*/
 void ACobblePaperCharacter::ShowGearHighlight()
 {
 	if(HeldGear == nullptr)
@@ -227,23 +262,3 @@ bool ACobblePaperCharacter::IsPlayerHoldingGear()
 	return HeldGear != nullptr;
 }
 
-bool ACobblePaperCharacter::ReceiveGear(AActor * Gear)
-{
-	if (HeldGear == nullptr)
-	{
-		ShowHeldGear();
-		HeldGear = Gear;
-		return true;
-	}
-	return false;
-}
-
-AActor * ACobblePaperCharacter::TakeGear()
-{
-	if (HeldGear != nullptr)
-	{
-		HideHeldGear();
-		return HeldGear;
-	}
-	return nullptr;
-}

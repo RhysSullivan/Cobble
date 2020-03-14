@@ -6,7 +6,9 @@
 #include "InteractInterface.h"
 #include "PaperSpriteComponent.h"
 #include "GameFramework/Actor.h"
+#include "Cobble/CobblePaperCharacter.h"
 #include "Interactable.generated.h"
+
 
 UCLASS()
 class COBBLE_API AInteractable : public AActor, public IInteractInterface
@@ -32,4 +34,5 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UPaperSpriteComponent* HighlightedSpriteComponent;
 	class USceneComponent* SceneRoot;
+	ACobblePaperCharacter* Player;
 };
