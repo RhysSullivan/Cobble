@@ -36,5 +36,5 @@ private:
 	AActor* GearInHolder = nullptr;
 
 private:
-	bool CanRecieveGear();
+	bool HasGearInHolder();
 };
