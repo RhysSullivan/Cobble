@@ -6,27 +6,60 @@
 void AGearHolder::Highlight()
 {
 	// if the player has a gear
-	if (Player != nullptr && Player->IsPlayerHoldingGear() && CanRecieveGear()) // this if statement has early execution on the left side so we wont dereference a nullptr
+	if (Player != nullptr) // this if statement has early execution on the left side so we wont dereference a nullptr
 	{
-		HighlightedSpriteComponent->SetHiddenInGame(false); // display gear input highlight
+		if (HasGearInHolder())
+		{
+			if (!Player->IsPlayerHoldingGear())
+			{
+				Player->ShowGearHighlight();
+			}
+		}
+		else if(Player->IsPlayerHoldingGear())
+		{
+			HighlightedSpriteComponent->SetHiddenInGame(false); // display gear input highlight
+		}
 	}
 }
 
 void AGearHolder::Unhighlight()
 {
-	HighlightedSpriteComponent->SetHiddenInGame(true);
+	if (HasGearInHolder())
+	{
+		if (Player != nullptr && !Player->IsPlayerHoldingGear())
+		{
+			Player->HideGearHighlight();
+		}
+	}
+	else
+	{
+		HighlightedSpriteComponent->SetHiddenInGame(true);
+	}
 }
 
 void AGearHolder::Interact()
 {
-	if (CanRecieveGear())
+	if (HasGearInHolder())
+	{
+		if (Player != nullptr)
+		{
+			if (Player->ReceiveGear(GearInHolder))
+			{
+				GearInHolder->SetActorLocation(FVector(0, -40000, 0));
+				GearInHolder = nullptr;
+				Player->HideGearHighlight();
+			}	
+		}
+	}
+	else
 	{
 		Player->TakeGear(GearInHolder);
-		if(GearInHolder != nullptr)
+		if (GearInHolder != nullptr)
 		{
 			FTransform GearTransform = HighlightedSpriteComponent->GetComponentTransform();
 			GearTransform.SetScale3D(GearInHolder->GetActorScale3D());
 			GearInHolder->SetActorTransform(GearTransform);
+			HighlightedSpriteComponent->SetHiddenInGame(true);
 		}
 	}
 }
@@ -50,7 +83,7 @@ AGearHolder::AGearHolder()
 
 }
 
-bool AGearHolder::CanRecieveGear()
+bool AGearHolder::HasGearInHolder()
 {
-	return GearInHolder == nullptr;
+	return GearInHolder != nullptr;
 }
