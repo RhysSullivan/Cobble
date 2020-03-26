@@ -45,6 +45,7 @@ void AGearHolder::Interact()
 		{
 			if (Player->ReceiveGear(GearInHolder))
 			{
+				GearInHolder->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 				GearInHolder->SetActorLocation(FVector(0, -40000, 0));
 				GearInHolder = nullptr;
 				Player->HideGearHighlight();
@@ -56,10 +57,12 @@ void AGearHolder::Interact()
 		Player->TakeGear(GearInHolder);
 		if (GearInHolder != nullptr)
 		{
+			GearInHolder->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 			FTransform GearTransform = HighlightedSpriteComponent->GetComponentTransform();
 			GearTransform.SetScale3D(GearInHolder->GetActorScale3D());
 			GearInHolder->SetActorTransform(GearTransform);
 			HighlightedSpriteComponent->SetHiddenInGame(true);
+			bIsGearTurning = true;
 		}
 	}
 }
@@ -72,7 +75,7 @@ void AGearHolder::BeginPlay()
 void AGearHolder::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (GearInHolder != nullptr)
+	if (GetIsGearTurning())
 	{
 		GearInHolder->AddActorLocalRotation(GearRotation * DeltaTime);
 	}
@@ -86,4 +89,12 @@ AGearHolder::AGearHolder()
 bool AGearHolder::HasGearInHolder()
 {
 	return GearInHolder != nullptr;
+}
+
+bool AGearHolder::GetIsGearTurning()
+{
+	if(GearInHolder == nullptr)
+		return false;
+	return bIsGearTurning;
+	
 }

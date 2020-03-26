@@ -22,7 +22,7 @@ public:
 	virtual void Highlight() override;
 	virtual void Unhighlight() override;
 	virtual void Interact() override;
-
+	bool GetIsGearTurning();
 public:
 	UPROPERTY(EditAnywhere)
 	FRotator GearRotation = FRotator(-200,0,0);
@@ -37,4 +37,5 @@ private:
 
 private:
 	bool HasGearInHolder();
+	bool bIsGearTurning = false;
 };
