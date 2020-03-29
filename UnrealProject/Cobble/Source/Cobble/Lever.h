@@ -23,7 +23,7 @@ public:
 	virtual void Highlight() override;
 	virtual void Unhighlight() override;
 	virtual void Interact() override;
-
+	virtual void BeginPlay() override;
 protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 	
@@ -35,4 +35,8 @@ protected:
 	class UPaperSpriteComponent* RightPlaceholder;
 private:
 	void RotateToMatchFlippedDirection();
+
+private:
+	UPROPERTY(VisibleDefaultsOnly)
+	class UChildActorComponent* LeftHose;
 };
