@@ -2,8 +2,7 @@
 
 
 #include "Lever.h"
-#include "Hose.h"
-#include "CableComponent.h"
+
 ALever::ALever()
 {
 	LeftPlaceholder = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("PlaceholderLeft"));
@@ -14,11 +13,6 @@ ALever::ALever()
 	LeftPlaceholder->SetHiddenInGame(true);
 	LeftPlaceholder->SetCollisionProfileName("OverlapAll");
 	RightPlaceholder->SetCollisionProfileName("OverlapAll");
-
-	LeftHose = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearHolderChildActor"));
-
-	LeftHose->SetupAttachment(SceneRoot);
-	LeftHose->SetChildActorClass(AHose::StaticClass());
 }
 
 void ALever::Highlight()
@@ -45,26 +39,8 @@ void ALever::Interact()
 	RotateToMatchFlippedDirection();
 }
 
-void ALever::BeginPlay()
-{
-	AHose* Hose = Cast<AHose>(LeftHose->GetChildActor());
-	if (Hose != nullptr)
-	{
-		Hose->Cable->bAttachEnd = false;
-		Hose->Cable->EndLocation = FVector::ZeroVector;
-	}
-}
-
 void ALever::OnConstruction(const FTransform & Transform)
 {
-	AHose* Hose = Cast<AHose>(LeftHose->GetChildActor());
-	if (Hose != nullptr)
-	{
-		Hose->SetActorLocation(GetActorLocation() + FVector(0, 0, 10));
-		Hose->Cable->EndLocation = GetActorForwardVector()* -Hose->CableStartOffset;
-		Hose->Cable->bAttachEnd = true;
-		//Hose->Cable->EndLocation += FVector(0, 0, 40);
-	}
 	RotateToMatchFlippedDirection();
 }
 

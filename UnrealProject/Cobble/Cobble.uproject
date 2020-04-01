@@ -10,8 +10,7 @@
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
 				"Engine",
-				"Paper2D",
-				"CableComponent"
+				"Paper2D"
 			]
 		}
 	],
