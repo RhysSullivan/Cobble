@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Linux" BasePlatform="Linux" SchemaVersion="12" SoundbankVersion="135">
+	<RootPaths>
+		<ProjectRoot>A:\Jeremiah\Documents\CobbleDev\UnrealProject\Cobble\Cobble_WwiseProject\</ProjectRoot>
+		<SourceFilesRoot>A:\Jeremiah\Documents\CobbleDev\UnrealProject\Cobble\Cobble_WwiseProject\.cache\Linux\</SourceFilesRoot>
+		<SoundBanksRoot>A:\Jeremiah\Documents\CobbleDev\UnrealProject\Cobble\Content\WwiseAudio\Linux\</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>A:\Jeremiah\Documents\CobbleDev\UnrealProject\Cobble\Cobble_WwiseProject\GeneratedSoundBanks\Linux</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<StreamedFiles/>
+	<MediaFilesNotInAnyBank/>
+	<SoundBanks>
+		<SoundBank Id="1355168291" Language="SFX">
+			<ObjectPath>Init</ObjectPath>
+			<ShortName>Init</ShortName>
+			<Path>Init.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="3398814740" Language="SFX">
+			<ObjectPath>\SoundBanks\Default Work Unit\Movement_SoundBank</ObjectPath>
+			<ShortName>Movement_SoundBank</ShortName>
+			<Path>Movement_SoundBank.bnk</Path>
+			<IncludedEvents>
+				<Event Id="3833651337" Name="Jump" ObjectPath="\Events\Default Work Unit\Jump">
+					<IncludedMemoryFiles>
+						<File Id="633452233" Language="SFX">
+							<ShortName>Jump.wav</ShortName>
+							<Path>SFX\Jump_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+			</IncludedEvents>
+		</SoundBank>
+	</SoundBanks>
+</SoundBanksInfo>
