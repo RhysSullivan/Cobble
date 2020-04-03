@@ -22,7 +22,20 @@ void AMovingPlatform::BeginPlay()
 void AMovingPlatform::OnConstruction(const FTransform & Transform)
 {
 	Super::OnConstruction(Transform);
-	
+	if (bIsStraightPath)
+	{
+		for (int i = 0; i < MovingPlatformPath->GetNumberOfSplinePoints(); i++)
+		{
+			MovingPlatformPath->SetSplinePointType(i, ESplinePointType::Linear);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < MovingPlatformPath->GetNumberOfSplinePoints(); i++)
+		{
+			MovingPlatformPath->SetSplinePointType(i, ESplinePointType::Curve);
+		}
+	}
 }
 
 void AMovingPlatform::Tick(float DeltaTime)

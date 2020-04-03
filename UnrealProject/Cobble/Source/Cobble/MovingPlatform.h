@@ -19,6 +19,8 @@ public:
 	float MovementSpeed = 100;
 	UPROPERTY(EditAnywhere)
 	float TimeToWaitAtEndPoint = 3;
+	UPROPERTY(EditAnywhere)
+	bool bIsStraightPath = false;
 	// Sets default values for this actor's properties
 	AMovingPlatform();
 

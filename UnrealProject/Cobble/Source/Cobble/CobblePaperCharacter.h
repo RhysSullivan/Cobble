@@ -107,5 +107,5 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* InteractCollision;
 	AActor* OverlappedActor;
-	AActor* HeldGear;
+	AActor* HeldActor;
 };

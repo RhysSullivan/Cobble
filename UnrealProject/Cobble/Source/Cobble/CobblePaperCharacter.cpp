@@ -11,6 +11,7 @@
 #include "Components/BoxComponent.h"
 #include "PaperSpriteComponent.h"
 #include "InteractInterface.h"
+#include "Gear.h"
 ACobblePaperCharacter::ACobblePaperCharacter()
 {	
 	PrimaryActorTick.bCanEverTick = true;
@@ -211,10 +212,10 @@ void ACobblePaperCharacter::PostInteract()
 
 bool ACobblePaperCharacter::ReceiveGear(AActor * Gear)
 {
-	if (HeldGear == nullptr)
+	if (HeldActor == nullptr)
 	{
 		ShowHeldGear();
-		HeldGear = Gear;
+		HeldActor = Gear;
 		return true;
 	}
 	return false;
@@ -222,11 +223,11 @@ bool ACobblePaperCharacter::ReceiveGear(AActor * Gear)
 
 bool ACobblePaperCharacter::TakeGear(AActor*& Gear)
 {
-	if (HeldGear != nullptr)
+	if (HeldActor != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("TAKINGGEAR"));
-		Gear = HeldGear;
-		HeldGear = nullptr;
+		Gear = HeldActor;
+		HeldActor = nullptr;
 		HideHeldGear();
 		return true;
 	}
@@ -238,7 +239,7 @@ GEAR HIGHLIGHTING
 */
 void ACobblePaperCharacter::ShowGearHighlight()
 {
-	if(HeldGear == nullptr)
+	if(HeldActor == nullptr)
 	HighlightedGearComponent->SetHiddenInGame(false);
 }
 
@@ -259,6 +260,9 @@ void ACobblePaperCharacter::HideHeldGear()
 
 bool ACobblePaperCharacter::IsPlayerHoldingGear()
 {
-	return HeldGear != nullptr;
+	if (HeldActor == nullptr)
+		return false;
+	AGear* Gear = Cast<AGear>(HeldActor);
+	return Gear != nullptr;
 }
 
