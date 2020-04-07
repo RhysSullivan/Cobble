@@ -2,6 +2,8 @@
 
 
 #include "Lever.h"
+#include "Hose.h"
+#include "CableComponent.h"
 
 ALever::ALever()
 {
@@ -13,6 +15,11 @@ ALever::ALever()
 	LeftPlaceholder->SetHiddenInGame(true);
 	LeftPlaceholder->SetCollisionProfileName("OverlapAll");
 	RightPlaceholder->SetCollisionProfileName("OverlapAll");
+
+	LeftHose = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearHolderChildActor"));
+
+	LeftHose->SetupAttachment(SceneRoot);
+	LeftHose->SetChildActorClass(AHose::StaticClass());
 }
 
 void ALever::Highlight()
@@ -39,8 +46,26 @@ void ALever::Interact()
 	RotateToMatchFlippedDirection();
 }
 
+void ALever::BeginPlay()
+{
+	AHose* Hose = Cast<AHose>(LeftHose->GetChildActor());
+	if (Hose != nullptr)
+	{
+		Hose->Cable->bAttachEnd = false;
+		Hose->Cable->EndLocation = FVector::ZeroVector;
+	}
+}
+
 void ALever::OnConstruction(const FTransform & Transform)
 {
+	AHose* Hose = Cast<AHose>(LeftHose->GetChildActor());
+	if (Hose != nullptr)
+	{
+		//Hose->SetActorLocation(GetActorLocation() + FVector(0, 0, 10));
+		Hose->Cable->EndLocation = GetActorForwardVector()* -Hose->CableStartOffset;
+		Hose->Cable->bAttachEnd = true;
+		//Hose->Cable->EndLocation += FVector(0, 0, 40);
+	}
 	RotateToMatchFlippedDirection();
 }
 
@@ -50,9 +75,19 @@ void ALever::RotateToMatchFlippedDirection()
 	{
 		HighlightedSpriteComponent->SetRelativeTransform(LeftPlaceholder->GetRelativeTransform());
 		RegularSpriteComponent->SetRelativeTransform(LeftPlaceholder->GetRelativeTransform());
+		AHose* Hose = Cast<AHose>(LeftHose->GetChildActor());
+		if (Hose != nullptr)
+		{
+			Hose->Cable->CableGravityScale = -1;
+		}
 	}
 	else
 	{
+		AHose* Hose = Cast<AHose>(LeftHose->GetChildActor());
+		if (Hose != nullptr)
+		{
+			Hose->Cable->CableGravityScale = 1;
+		}
 		HighlightedSpriteComponent->SetRelativeTransform(RightPlaceholder->GetRelativeTransform());
 		RegularSpriteComponent->SetRelativeTransform(RightPlaceholder->GetRelativeTransform());
 	}

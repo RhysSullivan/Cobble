@@ -44,6 +44,10 @@ public:
 	bool IsPlayerHoldingGear();
 	bool ReceiveGear(AActor* Gear);
 	bool TakeGear(AActor*& Gear);
+
+	void SetHeldActor(AActor* Other);
+
+
 public:
 	UPROPERTY(EditAnywhere)
 	class UPaperFlipbook* RunFlipbook;
