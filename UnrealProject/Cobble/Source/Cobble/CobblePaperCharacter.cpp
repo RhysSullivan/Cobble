@@ -11,6 +11,7 @@
 #include "Components/BoxComponent.h"
 #include "PaperSpriteComponent.h"
 #include "InteractInterface.h"
+#include "PickupInterface.h"
 #include "Gear.h"
 ACobblePaperCharacter::ACobblePaperCharacter()
 {	
@@ -191,6 +192,17 @@ void ACobblePaperCharacter::Interact()
 {
 	if (!CanInteract())
 		return;
+	if (HeldActor != nullptr)
+	{
+		IPickupInterface* HeldActorInterface = Cast<IPickupInterface>(HeldActor);
+		if (HeldActorInterface != nullptr)
+		{
+			HeldActorInterface->Drop();
+			HeldActor = nullptr;
+			return;
+		}
+		
+	}
 	FlipbookComponent->SetFlipbook(InteractFlipbook);
 	GetWorld()->GetTimerManager().SetTimer(InteractTimerHandle, this, &ACobblePaperCharacter::PostInteract, FlipbookComponent->GetFlipbookLength(), false);
 	IInteractInterface* OverlappedActorInteractInterface = Cast<IInteractInterface>(OverlappedActor);
@@ -232,6 +244,11 @@ bool ACobblePaperCharacter::TakeGear(AActor*& Gear)
 		return true;
 	}
 	return false;
+}
+
+void ACobblePaperCharacter::SetHeldActor(AActor * Other)
+{
+	HeldActor = Other;
 }
 
 /*
