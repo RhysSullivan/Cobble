@@ -8,9 +8,9 @@ public class Cobble : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "AkAudio", "CableComponent", "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "CableComponent", "Core", "CoreUObject", "Engine", "InputCore" });
 
-        PrivateDependencyModuleNames.AddRange(new string[] { "AkAudio", "CableComponent" });
+        PrivateDependencyModuleNames.AddRange(new string[] { "CableComponent" });
 
         // Uncomment if you are using Slate UI
         // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

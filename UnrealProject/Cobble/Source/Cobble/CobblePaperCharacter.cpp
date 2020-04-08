@@ -190,8 +190,6 @@ INTERACTION
 */
 void ACobblePaperCharacter::Interact()
 {
-	if (!CanInteract())
-		return;
 	if (HeldActor != nullptr)
 	{
 		IPickupInterface* HeldActorInterface = Cast<IPickupInterface>(HeldActor);
@@ -201,8 +199,10 @@ void ACobblePaperCharacter::Interact()
 			HeldActor = nullptr;
 			return;
 		}
-		
+
 	}
+	if (!CanInteract())
+		return;
 	FlipbookComponent->SetFlipbook(InteractFlipbook);
 	GetWorld()->GetTimerManager().SetTimer(InteractTimerHandle, this, &ACobblePaperCharacter::PostInteract, FlipbookComponent->GetFlipbookLength(), false);
 	IInteractInterface* OverlappedActorInteractInterface = Cast<IInteractInterface>(OverlappedActor);
@@ -246,9 +246,14 @@ bool ACobblePaperCharacter::TakeGear(AActor*& Gear)
 	return false;
 }
 
-void ACobblePaperCharacter::SetHeldActor(AActor * Other)
+bool ACobblePaperCharacter::SetHeldActor(AActor * Other)
 {
-	HeldActor = Other;
+	if(HeldActor == nullptr)
+	{
+		HeldActor = Other;
+		return true;
+	}
+	return false;
 }
 
 /*

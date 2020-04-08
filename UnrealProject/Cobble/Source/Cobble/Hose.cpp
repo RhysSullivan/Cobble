@@ -17,13 +17,14 @@ AHose::AHose()
 	EndCollision->SetupAttachment(GetRootComponent());
 	EndCollision->SetBoxExtent(FVector(80, 80, 80));
 	EndCollision->SetHiddenInGame(false);
-	/*
-	Expensive settings with good results
-	Cable->SubstepTime = 0.005;
-	Cable->NumSegments = 20;
-	Cable->SolverIterations = 16;
-	Cable->bEnableStiffness = true;
-	*/
+	Cable->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
+	if(bUseGoodCable)
+	{
+		Cable->SubstepTime = 0.005;
+		Cable->NumSegments = 20;
+		Cable->SolverIterations = 16;
+		Cable->bEnableStiffness = true;
+	}
 }
 
 void AHose::Highlight()
@@ -38,14 +39,17 @@ void AHose::Unhighlight()
 
 void AHose::Interact()
 {
+	ACobblePaperCharacter* Cobble = Cast<ACobblePaperCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	if (Cobble->SetHeldActor(this))
+	{
 	Cable->SetAttachEndTo(UGameplayStatics::GetPlayerPawn(GetWorld(), 0), TEXT(""), TEXT(""));
 	Cable->bAttachEnd = true;
-	ACobblePaperCharacter* Cobble = Cast<ACobblePaperCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	Cobble->SetHeldActor(this);
+	}
 }
 
 void AHose::Drop()
 {
+	Cable->AttachEndTo.OtherActor = nullptr;
 	Cable->bAttachEnd = false;
 }
 
