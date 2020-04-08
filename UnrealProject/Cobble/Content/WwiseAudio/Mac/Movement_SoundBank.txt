@@ -1,6 +1,0 @@
-Event	ID	Name			Wwise Object Path	Notes
-	3833651337	Jump			\Default Work Unit\Jump	
-
-In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	633452233	Jump	A:\Jeremiah\Documents\CobbleDev\UnrealProject\Cobble\Cobble_WwiseProject\.cache\Mac\SFX\Jump_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Jump		20888
-
