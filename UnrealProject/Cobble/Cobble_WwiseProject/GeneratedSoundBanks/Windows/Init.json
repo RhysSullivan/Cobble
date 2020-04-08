@@ -1,0 +1,25 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "12",
+  "SoundbankVersion": "135",
+  "RootPaths": {
+   "ProjectRoot": "A:\\Jeremiah\\Documents\\CobbleDev\\UnrealProject\\Cobble\\Cobble_WwiseProject\\",
+   "SourceFilesRoot": "A:\\Jeremiah\\Documents\\CobbleDev\\UnrealProject\\Cobble\\Cobble_WwiseProject\\.cache\\Windows\\",
+   "SoundBanksRoot": "A:\\Jeremiah\\Documents\\CobbleDev\\UnrealProject\\Cobble\\Cobble_WwiseProject\\GeneratedSoundBanks\\Windows\\",
+   "ExternalSourcesInputFile": "",
+   "ExternalSourcesOutputRoot": "A:\\Jeremiah\\Documents\\CobbleDev\\UnrealProject\\Cobble\\Cobble_WwiseProject\\GeneratedSoundBanks\\Windows"
+  },
+  "SoundBanks": [
+   {
+    "Id": "1355168291",
+    "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
+    "Language": "SFX",
+    "ObjectPath": "Init",
+    "ShortName": "Init",
+    "Path": "Init.bnk"
+   }
+  ]
+ }
+}

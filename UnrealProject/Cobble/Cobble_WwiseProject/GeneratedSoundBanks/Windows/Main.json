@@ -1,0 +1,44 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "12",
+  "SoundbankVersion": "135",
+  "RootPaths": {
+   "ProjectRoot": "A:\\Jeremiah\\Documents\\CobbleDev\\UnrealProject\\Cobble\\Cobble_WwiseProject\\",
+   "SourceFilesRoot": "A:\\Jeremiah\\Documents\\CobbleDev\\UnrealProject\\Cobble\\Cobble_WwiseProject\\.cache\\Windows\\",
+   "SoundBanksRoot": "A:\\Jeremiah\\Documents\\CobbleDev\\UnrealProject\\Cobble\\Cobble_WwiseProject\\GeneratedSoundBanks\\Windows\\",
+   "ExternalSourcesInputFile": "",
+   "ExternalSourcesOutputRoot": "A:\\Jeremiah\\Documents\\CobbleDev\\UnrealProject\\Cobble\\Cobble_WwiseProject\\GeneratedSoundBanks\\Windows"
+  },
+  "SoundBanks": [
+   {
+    "Id": "3161908922",
+    "GUID": "{7697034B-C02B-457D-B40A-ED1C21D6B27B}",
+    "Language": "SFX",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main",
+    "ShortName": "Main",
+    "Path": "Main.bnk",
+    "IncludedEvents": [
+     {
+      "Id": "3653870390",
+      "Name": "DoJump",
+      "ObjectPath": "\\Events\\Default Work Unit\\DoJump",
+      "GUID": "{AADBFF1E-4A43-4295-AC30-477CF47E61A8}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.118050",
+      "DurationMax": "0.118050",
+      "IncludedMemoryFiles": [
+       {
+        "Id": "710303886",
+        "Language": "SFX",
+        "ShortName": "Jump.wav",
+        "Path": "SFX\\Jump_10C4C929.wem"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}
