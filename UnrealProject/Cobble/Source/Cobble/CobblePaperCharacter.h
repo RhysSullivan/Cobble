@@ -45,7 +45,7 @@ public:
 	bool ReceiveGear(AActor* Gear);
 	bool TakeGear(AActor*& Gear);
 
-	void SetHeldActor(AActor* Other);
+	bool SetHeldActor(AActor* Other);
 
 
 public:

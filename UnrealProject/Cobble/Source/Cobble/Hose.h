@@ -35,5 +35,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		float CableStartOffset = 300;
-
+	UPROPERTY(EditAnywhere)
+		bool bUseGoodCable = true;
 };
